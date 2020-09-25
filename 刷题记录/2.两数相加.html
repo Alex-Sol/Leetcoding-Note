@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>刷题记录 · GitBook</title>
+        <title>2. 两数相加 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="1.两数之和.html" />
+    <link rel="next" href="3.无重复字符的最长子串.html" />
     
     
-    <link rel="prev" href="../" />
+    <link rel="prev" href="1.两数之和.html" />
     
 
     </head>
@@ -102,7 +102,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2" data-path="./">
+        <li class="chapter " data-level="1.2" data-path="./">
             
                 <a href="./">
             
@@ -129,7 +129,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.2" data-path="2.两数相加.html">
+        <li class="chapter active" data-level="1.2.2" data-path="2.两数相加.html">
             
                 <a href="2.两数相加.html">
             
@@ -203,7 +203,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >刷题记录</a>
+        <a href=".." >2. 两数相加</a>
     </h1>
 </div>
 
@@ -218,7 +218,42 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="&#x5237;&#x9898;&#x8BB0;&#x5F55;">&#x5237;&#x9898;&#x8BB0;&#x5F55;</h1>
+                                <h1 id="2-&#x4E24;&#x6570;&#x76F8;&#x52A0;">2. &#x4E24;&#x6570;&#x76F8;&#x52A0;</h1>
+<p>&#x7ED9;&#x51FA;&#x4E24;&#x4E2A; &#x975E;&#x7A7A; &#x7684;&#x94FE;&#x8868;&#x7528;&#x6765;&#x8868;&#x793A;&#x4E24;&#x4E2A;&#x975E;&#x8D1F;&#x7684;&#x6574;&#x6570;&#x3002;&#x5176;&#x4E2D;&#xFF0C;&#x5B83;&#x4EEC;&#x5404;&#x81EA;&#x7684;&#x4F4D;&#x6570;&#x662F;&#x6309;&#x7167; &#x9006;&#x5E8F; &#x7684;&#x65B9;&#x5F0F;&#x5B58;&#x50A8;&#x7684;&#xFF0C;&#x5E76;&#x4E14;&#x5B83;&#x4EEC;&#x7684;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x53EA;&#x80FD;&#x5B58;&#x50A8; &#x4E00;&#x4F4D; &#x6570;&#x5B57;&#x3002;</p>
+<p>&#x5982;&#x679C;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x8FD9;&#x4E24;&#x4E2A;&#x6570;&#x76F8;&#x52A0;&#x8D77;&#x6765;&#xFF0C;&#x5219;&#x4F1A;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x94FE;&#x8868;&#x6765;&#x8868;&#x793A;&#x5B83;&#x4EEC;&#x7684;&#x548C;&#x3002;</p>
+<p>&#x60A8;&#x53EF;&#x4EE5;&#x5047;&#x8BBE;&#x9664;&#x4E86;&#x6570;&#x5B57; 0 &#x4E4B;&#x5916;&#xFF0C;&#x8FD9;&#x4E24;&#x4E2A;&#x6570;&#x90FD;&#x4E0D;&#x4F1A;&#x4EE5; 0 &#x5F00;&#x5934;&#x3002;</p>
+<p><em>&#x793A;&#x4F8B;&#xFF1A;</em></p>
+<pre><code>&#x8F93;&#x5165;&#xFF1A;(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+&#x8F93;&#x51FA;&#xFF1A;7 -&gt; 0 -&gt; 8
+&#x539F;&#x56E0;&#xFF1A;342 + 465 = 807
+</code></pre><pre><code class="lang-c++"><span class="hljs-keyword">class</span> Solution {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function">ListNode* <span class="hljs-title">addTwoNumbers</span><span class="hljs-params">(ListNode* l1, ListNode* l2)</span> </span>{
+        ListNode* head = <span class="hljs-keyword">new</span> ListNode(<span class="hljs-number">-1</span>);  <span class="hljs-comment">//&#x5B58;&#x653E;&#x7ED3;&#x679C;&#x7684;&#x94FE;&#x8868;</span>
+        ListNode* w = head;  <span class="hljs-comment">//&#x79FB;&#x52A8;&#x6307;&#x9488;</span>
+        <span class="hljs-keyword">bool</span> carry = <span class="hljs-literal">false</span>;  <span class="hljs-comment">//&#x8FDB;&#x4F4D;&#x6807;&#x5FD7;</span>
+        <span class="hljs-keyword">int</span> sum;  <span class="hljs-comment">//&#x6309;&#x4F4D;&#x7684;&#x548C;</span>
+        <span class="hljs-keyword">while</span>(l1!=<span class="hljs-literal">NULL</span>||l2!=<span class="hljs-literal">NULL</span>)
+        {
+            sum = <span class="hljs-number">0</span>;
+            <span class="hljs-keyword">if</span>(l1!=<span class="hljs-literal">NULL</span>){
+                sum += l1-&gt;val;
+                l1 = l1-&gt;next;
+            }
+            <span class="hljs-keyword">if</span>(l2!=<span class="hljs-literal">NULL</span>){
+                sum += l2-&gt;val;
+                l2 = l2-&gt;next;
+            }
+            <span class="hljs-keyword">if</span>(carry) sum++;
+            w-&gt;next = <span class="hljs-keyword">new</span> ListNode(sum%<span class="hljs-number">10</span>);
+            w = w-&gt;next;
+            carry = sum&gt;=<span class="hljs-number">10</span>?<span class="hljs-literal">true</span>:<span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">if</span>(carry) w-&gt;next = <span class="hljs-keyword">new</span> ListNode(<span class="hljs-number">1</span>);
+        <span class="hljs-keyword">return</span> head-&gt;next;
+    }
+};
+</code></pre>
 
                                 
                                 </section>
@@ -246,12 +281,12 @@
 
             
                 
-                <a href="../" class="navigation navigation-prev " aria-label="Previous page: Introduction">
+                <a href="1.两数之和.html" class="navigation navigation-prev " aria-label="Previous page: 1. 两数之和">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="1.两数之和.html" class="navigation navigation-next " aria-label="Next page: 1. 两数之和">
+                <a href="3.无重复字符的最长子串.html" class="navigation navigation-next " aria-label="Next page: 3.无重复字符的最长子串">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -262,7 +297,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"刷题记录","level":"1.2","depth":1,"next":{"title":"1. 两数之和","level":"1.2.1","depth":2,"path":"刷题记录/1.两数之和.md","ref":"刷题记录/1.两数之和.md","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"刷题记录/README.md","mtime":"2020-09-25T06:42:53.380Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-09-25T15:41:53.993Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"2. 两数相加","level":"1.2.2","depth":2,"next":{"title":"3.无重复字符的最长子串","level":"1.2.3","depth":2,"path":"刷题记录/3.无重复字符的最长子串.md","ref":"刷题记录/3.无重复字符的最长子串.md","articles":[]},"previous":{"title":"1. 两数之和","level":"1.2.1","depth":2,"path":"刷题记录/1.两数之和.md","ref":"刷题记录/1.两数之和.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"刷题记录/2.两数相加.md","mtime":"2020-09-25T15:10:27.043Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-09-25T15:41:53.993Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

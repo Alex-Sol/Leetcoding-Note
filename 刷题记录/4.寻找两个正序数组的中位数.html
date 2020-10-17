@@ -232,6 +232,69 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="4-&#x5BFB;&#x627E;&#x4E24;&#x4E2A;&#x6B63;&#x5E8F;&#x6570;&#x7EC4;&#x7684;&#x4E2D;&#x4F4D;&#x6570;">4. &#x5BFB;&#x627E;&#x4E24;&#x4E2A;&#x6B63;&#x5E8F;&#x6570;&#x7EC4;&#x7684;&#x4E2D;&#x4F4D;&#x6570;</h1>
+<pre><code class="lang-c++"><span class="hljs-keyword">class</span> Solution {
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">double</span> <span class="hljs-title">findMedianSortedArrays</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums1, <span class="hljs-keyword">int</span>[] nums2)</span> </span>{
+        <span class="hljs-keyword">int</span> length1 = nums1.length, length2 = nums2.length;
+        <span class="hljs-keyword">int</span> totalLength = length1 + length2;
+        <span class="hljs-keyword">if</span> (totalLength % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>) {
+            <span class="hljs-keyword">int</span> midIndex = totalLength / <span class="hljs-number">2</span>;
+            <span class="hljs-keyword">double</span> median = getKthElement(nums1, nums2, midIndex + <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">return</span> median;
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">int</span> midIndex1 = totalLength / <span class="hljs-number">2</span> - <span class="hljs-number">1</span>, midIndex2 = totalLength / <span class="hljs-number">2</span>;
+            <span class="hljs-keyword">double</span> median = (getKthElement(nums1, nums2, midIndex1 + <span class="hljs-number">1</span>) + getKthElement(nums1, nums2, midIndex2 + <span class="hljs-number">1</span>)) / <span class="hljs-number">2.0</span>;
+            <span class="hljs-keyword">return</span> median;
+        }
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getKthElement</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums1, <span class="hljs-keyword">int</span>[] nums2, <span class="hljs-keyword">int</span> k)</span> </span>{
+        <span class="hljs-comment">/* &#x4E3B;&#x8981;&#x601D;&#x8DEF;&#xFF1A;&#x8981;&#x627E;&#x5230;&#x7B2C; k (k&gt;1) &#x5C0F;&#x7684;&#x5143;&#x7D20;&#xFF0C;&#x90A3;&#x4E48;&#x5C31;&#x53D6; pivot1 = nums1[k/2-1] &#x548C; pivot2 = nums2[k/2-1] &#x8FDB;&#x884C;&#x6BD4;&#x8F83;
+         * &#x8FD9;&#x91CC;&#x7684; &quot;/&quot; &#x8868;&#x793A;&#x6574;&#x9664;
+         * nums1 &#x4E2D;&#x5C0F;&#x4E8E;&#x7B49;&#x4E8E; pivot1 &#x7684;&#x5143;&#x7D20;&#x6709; nums1[0 .. k/2-2] &#x5171;&#x8BA1; k/2-1 &#x4E2A;
+         * nums2 &#x4E2D;&#x5C0F;&#x4E8E;&#x7B49;&#x4E8E; pivot2 &#x7684;&#x5143;&#x7D20;&#x6709; nums2[0 .. k/2-2] &#x5171;&#x8BA1; k/2-1 &#x4E2A;
+         * &#x53D6; pivot = min(pivot1, pivot2)&#xFF0C;&#x4E24;&#x4E2A;&#x6570;&#x7EC4;&#x4E2D;&#x5C0F;&#x4E8E;&#x7B49;&#x4E8E; pivot &#x7684;&#x5143;&#x7D20;&#x5171;&#x8BA1;&#x4E0D;&#x4F1A;&#x8D85;&#x8FC7; (k/2-1) + (k/2-1) &lt;= k-2 &#x4E2A;
+         * &#x8FD9;&#x6837; pivot &#x672C;&#x8EAB;&#x6700;&#x5927;&#x4E5F;&#x53EA;&#x80FD;&#x662F;&#x7B2C; k-1 &#x5C0F;&#x7684;&#x5143;&#x7D20;
+         * &#x5982;&#x679C; pivot = pivot1&#xFF0C;&#x90A3;&#x4E48; nums1[0 .. k/2-1] &#x90FD;&#x4E0D;&#x53EF;&#x80FD;&#x662F;&#x7B2C; k &#x5C0F;&#x7684;&#x5143;&#x7D20;&#x3002;&#x628A;&#x8FD9;&#x4E9B;&#x5143;&#x7D20;&#x5168;&#x90E8; &quot;&#x5220;&#x9664;&quot;&#xFF0C;&#x5269;&#x4E0B;&#x7684;&#x4F5C;&#x4E3A;&#x65B0;&#x7684; nums1 &#x6570;&#x7EC4;
+         * &#x5982;&#x679C; pivot = pivot2&#xFF0C;&#x90A3;&#x4E48; nums2[0 .. k/2-1] &#x90FD;&#x4E0D;&#x53EF;&#x80FD;&#x662F;&#x7B2C; k &#x5C0F;&#x7684;&#x5143;&#x7D20;&#x3002;&#x628A;&#x8FD9;&#x4E9B;&#x5143;&#x7D20;&#x5168;&#x90E8; &quot;&#x5220;&#x9664;&quot;&#xFF0C;&#x5269;&#x4E0B;&#x7684;&#x4F5C;&#x4E3A;&#x65B0;&#x7684; nums2 &#x6570;&#x7EC4;
+         * &#x7531;&#x4E8E;&#x6211;&#x4EEC; &quot;&#x5220;&#x9664;&quot; &#x4E86;&#x4E00;&#x4E9B;&#x5143;&#x7D20;&#xFF08;&#x8FD9;&#x4E9B;&#x5143;&#x7D20;&#x90FD;&#x6BD4;&#x7B2C; k &#x5C0F;&#x7684;&#x5143;&#x7D20;&#x8981;&#x5C0F;&#xFF09;&#xFF0C;&#x56E0;&#x6B64;&#x9700;&#x8981;&#x4FEE;&#x6539; k &#x7684;&#x503C;&#xFF0C;&#x51CF;&#x53BB;&#x5220;&#x9664;&#x7684;&#x6570;&#x7684;&#x4E2A;&#x6570;
+         */</span>
+
+        <span class="hljs-keyword">int</span> length1 = nums1.length, length2 = nums2.length;
+        <span class="hljs-keyword">int</span> index1 = <span class="hljs-number">0</span>, index2 = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">int</span> kthElement = <span class="hljs-number">0</span>;
+
+        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+            <span class="hljs-comment">// &#x8FB9;&#x754C;&#x60C5;&#x51B5;</span>
+            <span class="hljs-keyword">if</span> (index1 == length1) {
+                <span class="hljs-keyword">return</span> nums2[index2 + k - <span class="hljs-number">1</span>];
+            }
+            <span class="hljs-keyword">if</span> (index2 == length2) {
+                <span class="hljs-keyword">return</span> nums1[index1 + k - <span class="hljs-number">1</span>];
+            }
+            <span class="hljs-keyword">if</span> (k == <span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">return</span> Math.min(nums1[index1], nums2[index2]);
+            }
+
+            <span class="hljs-comment">// &#x6B63;&#x5E38;&#x60C5;&#x51B5;</span>
+            <span class="hljs-keyword">int</span> half = k / <span class="hljs-number">2</span>;
+            <span class="hljs-keyword">int</span> newIndex1 = Math.min(index1 + half, length1) - <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">int</span> newIndex2 = Math.min(index2 + half, length2) - <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">int</span> pivot1 = nums1[newIndex1], pivot2 = nums2[newIndex2];
+            <span class="hljs-keyword">if</span> (pivot1 &lt;= pivot2) {
+                k -= (newIndex1 - index1 + <span class="hljs-number">1</span>);
+                index1 = newIndex1 + <span class="hljs-number">1</span>;
+            } <span class="hljs-keyword">else</span> {
+                k -= (newIndex2 - index2 + <span class="hljs-number">1</span>);
+                index2 = newIndex2 + <span class="hljs-number">1</span>;
+            }
+        }
+    }
+}
+
+&#x4F5C;&#x8005;&#xFF1A;LeetCode-Solution
+&#x94FE;&#x63A5;&#xFF1A;https:<span class="hljs-comment">//leetcode-cn.com/problems/median-of-two-sorted-arrays/solution/xun-zhao-liang-ge-you-xu-shu-zu-de-zhong-wei-s-114/</span>
+&#x6765;&#x6E90;&#xFF1A;&#x529B;&#x6263;&#xFF08;LeetCode&#xFF09;
+</code></pre>
 
                                 
                                 </section>
@@ -275,7 +338,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"4. 寻找两个正序数组的中位数","level":"1.2.4","depth":2,"next":{"title":"算法实践","level":"1.3","depth":1,"path":"算法实践/README.md","ref":"算法实践/README.md","articles":[]},"previous":{"title":"3.无重复字符的最长子串","level":"1.2.3","depth":2,"path":"刷题记录/3.无重复字符的最长子串.md","ref":"刷题记录/3.无重复字符的最长子串.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"刷题记录/4.寻找两个正序数组的中位数.md","mtime":"2020-09-25T15:57:49.981Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-09-25T16:07:17.660Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"4. 寻找两个正序数组的中位数","level":"1.2.4","depth":2,"next":{"title":"算法实践","level":"1.3","depth":1,"path":"算法实践/README.md","ref":"算法实践/README.md","articles":[]},"previous":{"title":"3.无重复字符的最长子串","level":"1.2.3","depth":2,"path":"刷题记录/3.无重复字符的最长子串.md","ref":"刷题记录/3.无重复字符的最长子串.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"刷题记录/4.寻找两个正序数组的中位数.md","mtime":"2020-10-17T12:07:03.290Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-17T12:07:31.125Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
